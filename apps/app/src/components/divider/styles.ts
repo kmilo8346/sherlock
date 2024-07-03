@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   divider: {
     height: 0.3,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: colors.veryLightGray,
   },
 });
 

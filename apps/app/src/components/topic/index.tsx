@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 import styles from './styles';
+import colors from '../../styles/colors';
 
 interface ITopicProps {
   label: string;
@@ -21,7 +22,7 @@ export const Topic = (props: ITopicProps) => {
       <Text
         style={[
           {
-            color: selected ? '#14171A' : '#657786',
+            color: selected ? colors.black : colors.gray,
           },
           styles.label,
         ]}

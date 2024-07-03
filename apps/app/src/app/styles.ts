@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../styles/colors';
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -10,7 +11,7 @@ const styles = StyleSheet.create({
     minHeight: 36,
   },
   insightScrollView: {
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.white,
   },
 });
 

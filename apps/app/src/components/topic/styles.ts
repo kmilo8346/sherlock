@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
   },
   indicator: {
     height: 3,
-    backgroundColor: '#1DA1F2',
+    backgroundColor: colors.blue,
     borderRadius: 10,
   },
 });

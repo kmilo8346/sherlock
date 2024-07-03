@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
   card: {
@@ -22,6 +23,9 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
   },
+  date: {
+    color: colors.gray,
+  },
   statsContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -35,7 +39,7 @@ const styles = StyleSheet.create({
   },
   statText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.gray,
   },
   space: {
     flex: 1,

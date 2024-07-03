@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Divider, InsightCard, Topic } from '../components';
 import styles from './styles';
+import colors from '../styles/colors';
 
 export const App = () => {
   const [loading, setLoading] = React.useState(true);
@@ -24,7 +25,7 @@ export const App = () => {
         <SafeAreaView
           style={[styles.safeAreaView, { justifyContent: 'center' }]}
         >
-          <ActivityIndicator id="cuco" size="small" color="#0000ff" />
+          <ActivityIndicator id="cuco" size="small" color={colors.blue} />
         </SafeAreaView>
       </>
     );
