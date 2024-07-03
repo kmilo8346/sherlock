@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "📱 App",
+      "path": "./apps/app/src"
+    },
+    {
+      "name": "Monorepo",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder:Monorepo}"
+  }
+}
+
+
