@@ -1,32 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTopic, Topic } from '@sherlock/models';
-import { ICollection } from '@sherlock/core';
+import { Inject, Injectable } from '@nestjs/common';
+import { DBService } from '@sherlock/core';
+import { CreateTopic, Topic, UpdateTopic } from '@sherlock/models';
+import { MongoClient } from 'mongodb';
+
+const COLLECTION_NAME = 'topics';
 
 @Injectable()
-export class TopicsService {
-  async getAll(): Promise<ICollection<Topic>> {
-    return {
-      total: 5,
-      from: 0,
-      size: 5,
-      data: [
-        {
-          _id: '1',
-          label: 'Topic 1',
-          query: 'Query 1',
-          created_at: '2021-01-01T00:00:00Z',
-          updated_at: '2021-01-01T00:00:00Z',
-        },
-      ],
-    };
-  }
-
-  async create(createTopic: CreateTopic): Promise<Topic> {
-    return {
-      ...createTopic,
-      _id: '1',
-      created_at: '2021-01-01T00:00:00Z',
-      updated_at: '2021-01-01T00:00:00Z',
-    };
+export class TopicsService extends DBService<Topic, CreateTopic, UpdateTopic> {
+  constructor(@Inject('MONGO_CLIENT') mongoClient: MongoClient) {
+    super(mongoClient, COLLECTION_NAME);
   }
 }

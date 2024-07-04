@@ -50,3 +50,18 @@ export class CreateInsight {
   @Type(() => InsightStats)
   stats!: InsightStats;
 }
+
+export class UpdateInsight {
+  @IsString()
+  @IsNotEmpty()
+  slug!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  content!: string;
+
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => InsightStats)
+  stats!: InsightStats;
+}

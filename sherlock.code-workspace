@@ -9,7 +9,7 @@
       "path": "./apps/api/src"
     },
     {
-      "name": "📚 Models",
+      "name": "📦 Models",
       "path": "./lib/models/src"
     },
     {

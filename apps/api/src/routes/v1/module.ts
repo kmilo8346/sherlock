@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 
+import { MongoModule } from '@sherlock/core';
 import { InsightsModule } from './insights/module';
 import { TopicsModule } from './topics/module';
 
 @Module({
-  imports: [InsightsModule, TopicsModule],
+  imports: [MongoModule, InsightsModule, TopicsModule],
   controllers: [],
   providers: [],
 })

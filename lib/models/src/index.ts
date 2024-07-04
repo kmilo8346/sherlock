@@ -1,2 +1,2 @@
-export { Topic, CreateTopic } from './topic';
-export { Insight, InsightStats, CreateInsight } from './insight';
+export { Topic, CreateTopic, UpdateTopic } from './topic';
+export { Insight, InsightStats, CreateInsight, UpdateInsight } from './insight';

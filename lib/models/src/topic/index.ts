@@ -17,3 +17,13 @@ export class CreateTopic {
   @IsNotEmpty()
   query!: string;
 }
+
+export class UpdateTopic {
+  @IsString()
+  @IsNotEmpty()
+  label!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  query!: string;
+}
