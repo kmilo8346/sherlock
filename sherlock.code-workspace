@@ -5,6 +5,10 @@
       "path": "./apps/app/src"
     },
     {
+      "name": "🚀 Api",
+      "path": "./apps/api/src"
+    },
+    {
       "name": "Monorepo",
       "path": "."
     }
@@ -13,5 +17,3 @@
     "terminal.integrated.cwd": "${workspaceFolder:Monorepo}"
   }
 }
-
-
