@@ -9,6 +9,14 @@
       "path": "./apps/api/src"
     },
     {
+      "name": "📚 Models",
+      "path": "./lib/models/src"
+    },
+    {
+      "name": "🧰 Core",
+      "path": "./lib/core/src"
+    },
+    {
       "name": "Monorepo",
       "path": "."
     }

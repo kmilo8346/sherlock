@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@sherlock/core": ["lib/core/src/index.ts"],
+      "@sherlock/models": ["lib/models/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
