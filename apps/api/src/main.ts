@@ -4,8 +4,9 @@
  */
 
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 
+import { JwtAuthGuard } from './lib';
 import { RoutesModule } from './routes/module';
 
 async function bootstrap() {
@@ -20,6 +21,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
+
+  // Guard global que valida el token JWT
+  const reflector = app.get(Reflector);
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
