@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { TopicsService } from './service';
-import { CreateTopic, UpdateTopic } from '@sherlock/models';
+import { CreateTopic, SearchParams, UpdateTopic } from '@sherlock/models';
 
 @Controller('/v1/topics')
 export class TopicsController {
@@ -13,8 +13,8 @@ export class TopicsController {
   }
 
   @Get()
-  getAll() {
-    return this.topicsService.getAll({});
+  getAll(@Query() searchParams: SearchParams) {
+    return this.topicsService.getAll(searchParams);
   }
 
   @Post()

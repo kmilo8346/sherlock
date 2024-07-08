@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { MongoModule } from '@sherlock/core';
+import { MongoModule } from '../../lib';
 import { InsightsModule } from './insights/module';
 import { TopicsModule } from './topics/module';
 

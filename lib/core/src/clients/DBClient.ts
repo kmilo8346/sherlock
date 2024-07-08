@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ICollection, ISearchParams } from '@sherlock/core';
+import { ICollection, SearchParams } from '@sherlock/models';
 import {
   Document,
   Collection,
@@ -9,7 +9,7 @@ import {
   OptionalUnlessRequiredId,
 } from 'mongodb';
 
-export abstract class DBService<T extends Document, C, U> {
+export abstract class DBClient<T extends Document> {
   protected readonly collectionName: string;
   protected readonly collection: Collection<T>;
 
@@ -18,6 +18,12 @@ export abstract class DBService<T extends Document, C, U> {
     this.collection = mongoClient.db().collection<T>(collectionName);
   }
 
+  /**
+   * Obtiene un documento por su id
+   * La función lanza una excepción si no se encuentra el documento
+   * @param id
+   * @returns {Promise<T>}
+   */
   async getById(id: string): Promise<T> {
     const filter = {
       _id: new ObjectId(id),
@@ -25,7 +31,7 @@ export abstract class DBService<T extends Document, C, U> {
 
     const data = await this.collection.findOne(filter);
 
-    if (!data) {
+    if (data === null) {
       throw new HttpException(
         `Entity (${this.collectionName}) not found`,
         HttpStatus.NOT_FOUND
@@ -35,17 +41,19 @@ export abstract class DBService<T extends Document, C, U> {
     return data as T;
   }
 
-  async getAll(params?: ISearchParams): Promise<ICollection<T>> {
-    const _params = Object.assign({ from: 0, size: 10 }, params);
+  /**
+   * Obtiene todos los documentos de la colección
+   * filtrados por los parámetros de búsqueda
+   * @param params
+   * @returns {Promise<ICollection<T>>}
+   */
+  async getAll(params?: SearchParams): Promise<ICollection<T>> {
+    const _params = Object.assign({ filter: {}, from: 0, size: 10 }, params);
 
-    const { query, from, size } = _params;
+    const { filter, from, size } = _params;
     const [data, total] = await Promise.all([
-      this.collection
-        .find(query || {})
-        .skip(from)
-        .limit(size)
-        .toArray(),
-      this.collection.countDocuments(query),
+      this.collection.find(filter).skip(from).limit(size).toArray(),
+      this.collection.countDocuments(filter),
     ]);
 
     return {
@@ -56,7 +64,12 @@ export abstract class DBService<T extends Document, C, U> {
     };
   }
 
-  async create(createTopic: C): Promise<T> {
+  /**
+   * Crear un nuevo documento en la colección
+   * @param createTopic
+   * @returns {Promise<T>}
+   */
+  async create<C>(createTopic: C): Promise<T> {
     const data = {
       ...createTopic,
       created_at: new Date().toISOString(),
@@ -77,7 +90,12 @@ export abstract class DBService<T extends Document, C, U> {
     return data;
   }
 
-  async update(id: string, updateTopic: U): Promise<void> {
+  /**
+   * Actualiza un documento en la colección
+   * @param id
+   * @param updateTopic
+   */
+  async update<U>(id: string, updateTopic: U): Promise<void> {
     const data = {
       ...updateTopic,
       updated_at: new Date().toISOString(),

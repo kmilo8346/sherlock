@@ -1,7 +1,8 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 export class Topic {
-  _id!: string;
+  _id!: ObjectId;
   label!: string;
   query!: string;
   created_at!: string;

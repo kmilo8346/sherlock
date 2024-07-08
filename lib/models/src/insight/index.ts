@@ -6,9 +6,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ObjectId } from 'mongodb';
 
 export class Insight {
-  _id!: string;
+  _id!: ObjectId;
   topic_id!: string;
   slug!: string;
   content!: string;

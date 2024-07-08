@@ -13,7 +13,11 @@ async function bootstrap() {
 
   // Este pipe valida parámetros que se
   // tipiaron con clases que usan class-validator
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    })
+  );
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

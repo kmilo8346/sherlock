@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { InsightsService } from './service';
-import { CreateInsight, UpdateInsight } from '@sherlock/models';
+import { CreateInsight, SearchParams, UpdateInsight } from '@sherlock/models';
 
 @Controller('/v1/insights')
 export class InsightsController {
@@ -13,12 +13,8 @@ export class InsightsController {
   }
 
   @Get()
-  getAll(@Query('topicId') topicId: string | undefined) {
-    return this.insightsService.getAll({
-      query: {
-        topic_id: topicId,
-      },
-    });
+  getAll(@Query() searchParams: SearchParams) {
+    return this.insightsService.getAll(searchParams);
   }
 
   @Post()
