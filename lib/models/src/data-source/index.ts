@@ -1,15 +1,14 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { ObjectId } from 'mongodb';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class Topic {
-  _id!: ObjectId;
+export class DataSource {
+  _id!: string;
   label!: string;
   query!: string;
   created_at!: string;
   updated_at!: string;
 }
 
-export class CreateTopic {
+export class CreateDataSource {
   @IsString()
   @IsNotEmpty()
   label!: string;
@@ -19,12 +18,14 @@ export class CreateTopic {
   query!: string;
 }
 
-export class UpdateTopic {
+export class UpdateDataSource {
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   label!: string;
 
   @IsString()
   @IsNotEmpty()
+  @IsOptional()
   query!: string;
 }

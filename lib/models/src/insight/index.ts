@@ -1,17 +1,16 @@
 import {
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ObjectId } from 'mongodb';
 
 export class Insight {
-  _id!: ObjectId;
-  topic_id!: string;
-  slug!: string;
+  _id!: string;
+  data_source_id!: string;
   content!: string;
   stats!: {
     tweets: number;
@@ -36,11 +35,7 @@ export class InsightStats {
 export class CreateInsight {
   @IsString()
   @IsNotEmpty()
-  topic_id!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  slug!: string;
+  data_source_id!: string;
 
   @IsString()
   @IsNotEmpty()
@@ -55,14 +50,12 @@ export class CreateInsight {
 export class UpdateInsight {
   @IsString()
   @IsNotEmpty()
-  slug!: string;
-
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   content!: string;
 
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => InsightStats)
+  @IsOptional()
   stats!: InsightStats;
 }

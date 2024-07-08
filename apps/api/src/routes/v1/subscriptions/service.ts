@@ -1,0 +1,11 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { DBClient } from '@sherlock/core';
+import { Subscription } from '@sherlock/models';
+import { MongoClient } from 'mongodb';
+
+@Injectable()
+export class SubscriptionsService extends DBClient<Subscription> {
+  constructor(@Inject('MONGO_CLIENT') mongoClient: MongoClient) {
+    super(mongoClient, 'subscriptions');
+  }
+}

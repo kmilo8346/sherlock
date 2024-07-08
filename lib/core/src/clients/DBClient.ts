@@ -32,10 +32,7 @@ export abstract class DBClient<T extends Document> {
     const data = await this.collection.findOne(filter);
 
     if (data === null) {
-      throw new HttpException(
-        `Entity (${this.collectionName}) not found`,
-        HttpStatus.NOT_FOUND
-      );
+      throw new HttpException(`Document not found`, HttpStatus.NOT_FOUND);
     }
 
     return data as T;
@@ -82,7 +79,7 @@ export abstract class DBClient<T extends Document> {
 
     if (result.acknowledged === false) {
       throw new HttpException(
-        `Failed to create entity (${this.collectionName})`,
+        `Failed to create document`,
         HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
@@ -108,7 +105,24 @@ export abstract class DBClient<T extends Document> {
 
     if (result.modifiedCount === 0) {
       throw new HttpException(
-        `Failed to update entity (${this.collectionName})`,
+        `Failed to update document`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+  }
+
+  /**
+   * Elimina un documento de la colección
+   * @param id
+   */
+  async delete(id: string): Promise<void> {
+    const result = await this.collection.deleteOne({
+      _id: new ObjectId(id),
+    } as Filter<T>);
+
+    if (result.deletedCount === 0) {
+      throw new HttpException(
+        `Failed to delete document`,
         HttpStatus.BAD_REQUEST
       );
     }

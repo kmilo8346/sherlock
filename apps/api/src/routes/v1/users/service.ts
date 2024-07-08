@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DBClient } from '@sherlock/core';
-import { Topic } from '@sherlock/models';
+import { User } from '@sherlock/models';
 import { MongoClient } from 'mongodb';
 
 @Injectable()
-export class TopicsService extends DBClient<Topic> {
+export class UsersService extends DBClient<User> {
   constructor(@Inject('MONGO_CLIENT') mongoClient: MongoClient) {
-    super(mongoClient, 'topics');
+    super(mongoClient, 'users');
   }
 }
