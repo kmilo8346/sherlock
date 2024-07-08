@@ -12,12 +12,12 @@ export class InsightsController {
     return this.insightsService.getById(id);
   }
 
-  @Get()
+  @Get('/')
   getAll(@Query() searchParams: SearchParams) {
     return this.insightsService.getAll(searchParams);
   }
 
-  @Post()
+  @Post('/')
   create(@Body() createInsight: CreateInsight) {
     return this.insightsService.create(createInsight);
   }

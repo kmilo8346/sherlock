@@ -56,5 +56,4 @@ npm-debug.*
 web-build/
 cache/
 
-
-apps/app-e2e/artifacts
+.env

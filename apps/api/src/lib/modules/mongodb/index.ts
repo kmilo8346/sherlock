@@ -1,21 +1,21 @@
 import { Module, Global, OnModuleInit, Logger } from '@nestjs/common';
 import { MongoClient } from 'mongodb';
 import * as colors from 'ansi-colors';
-
-const LOGGER_CONTEXT = 'MongodbModule';
-const MONGODB_URI =
-  'mongodb://root:root@localhost:27017/sherlock?authSource=admin';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Global()
 @Module({
-  imports: [],
+  imports: [ConfigModule],
   providers: [
     {
       provide: 'MONGO_CLIENT',
-      useFactory: async (): Promise<MongoClient> => {
-        const client = new MongoClient(MONGODB_URI);
+      useFactory: async (
+        configService: ConfigService
+      ): Promise<MongoClient> => {
+        const client = new MongoClient(configService.get('MONGODB_URI'));
         return await client.connect();
       },
+      inject: [ConfigService],
     },
   ],
   exports: ['MONGO_CLIENT'],
@@ -23,8 +23,8 @@ const MONGODB_URI =
 export class MongoModule implements OnModuleInit {
   private readonly logger: Logger;
 
-  constructor() {
-    this.logger = new Logger(LOGGER_CONTEXT);
+  constructor(private readonly configService: ConfigService) {
+    this.logger = new Logger('MongoDBModule');
   }
 
   async onModuleInit() {
@@ -35,7 +35,7 @@ export class MongoModule implements OnModuleInit {
       return colors.yellow(`+${Math.round(responseTime)}ms`);
     };
 
-    const client = new MongoClient(MONGODB_URI);
+    const client = new MongoClient(this.configService.get('MONGODB_URI'));
     try {
       this.logger.log(`Connecting to MongoDB...`);
       await client.connect();

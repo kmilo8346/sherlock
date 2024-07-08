@@ -12,12 +12,12 @@ export class TopicsController {
     return this.topicsService.getById(id);
   }
 
-  @Get()
+  @Get('/')
   getAll(@Query() searchParams: SearchParams) {
     return this.topicsService.getAll(searchParams);
   }
 
-  @Post()
+  @Post('/')
   create(@Body() createTopic: CreateTopic) {
     return this.topicsService.create(createTopic);
   }
