@@ -12,6 +12,9 @@ import { RoutesModule } from './routes/module';
 async function bootstrap() {
   const app = await NestFactory.create(RoutesModule);
 
+  // Habilitar CORS
+  app.enableCors({});
+
   // Este pipe valida parámetros que se
   // tipiaron con clases que usan class-validator
   app.useGlobalPipes(

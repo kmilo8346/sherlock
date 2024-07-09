@@ -1,37 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import { LoginScreen, HomeScreen, BookmarksScreen } from '../screens';
-import { streamer } from '../lib';
+import {
+  BootScreen,
+  LoginScreen,
+  HomeScreen,
+  BookmarksScreen,
+} from '../screens';
+import { authenticator, streamer } from '../lib';
 
 const Drawer = createDrawerNavigator();
 
 export const App = () => {
+  const [booted, setBooted] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
 
-  const handleAuthenticated = () => {
+  const handleBooted = () => {
+    const isAuthenticated = authenticator.isAuthenticated();
+
+    setAuthenticated(isAuthenticated);
+    setBooted(true);
+  };
+
+  const handleLoggedIn = () => {
     setAuthenticated(true);
   };
 
-  const handleUserLoggedIn = () => {};
-
-  const handleUserLoggedOut = () => {};
+  const handleLoggedOut = () => {
+    setAuthenticated(false);
+  };
 
   useEffect(() => {
-    streamer.on('USER:LOGGED_IN', handleAuthenticated);
-    streamer.on('USER:LOGGED_OUT', handleUserLoggedOut);
+    streamer.on('USER:LOGGED_OUT', handleLoggedOut);
     return () => {
-      streamer.off('USER:LOGGED_IN', handleAuthenticated);
-      streamer.off('USER:LOGGED_OUT', handleUserLoggedOut);
+      streamer.off('USER:LOGGED_OUT', handleLoggedOut);
     };
   }, []);
 
-  if (!authenticated) {
-    return <LoginScreen />;
+  if (!booted) {
+    return <BootScreen onBooted={handleBooted} />;
   }
+
+  if (!authenticated) {
+    return <LoginScreen onLoggedIn={handleLoggedIn} />;
+  }
+
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator initialRouteName="Novedades">
         <Drawer.Screen name="Novedades" component={HomeScreen} />
         <Drawer.Screen name="Elementos Guardados" component={BookmarksScreen} />
       </Drawer.Navigator>

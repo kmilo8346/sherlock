@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import { SafeAreaView, StatusBar, Text, View, ScrollView } from 'react-native';
 import styles from './styles';
 import { Button, Input } from '@rneui/themed';
-import { streamer } from '../../lib';
-import colors from '../../styles/colors';
+import { authClient } from '../../clients';
+import { Credentials } from '@sherlock/models';
+import { authenticator } from '../../lib';
 
-export const LoginScreen = () => {
+export interface LoginScreenProps {
+  onLoggedIn: () => void;
+}
+
+export const LoginScreen = (props: LoginScreenProps) => {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    email: '',
+  const [form, setForm] = useState<Credentials>({
+    username: '',
     password: '',
   });
 
-  const canSubmit = form.email && form.password;
+  const canSubmit = form.username && form.password;
 
   const handleInputChange = (name: string, value: string) => {
     setForm({
@@ -25,8 +30,9 @@ export const LoginScreen = () => {
     try {
       setLoading(true);
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      streamer.emit('USER:LOGGED_IN');
+      const auth = await authClient.login(form);
+      authenticator.signIn(auth);
+      props.onLoggedIn();
     } catch (error) {
     } finally {
       setLoading(false);
@@ -36,27 +42,23 @@ export const LoginScreen = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: colors.white,
-        }}
-      >
-        <ScrollView style={{ flex: 1, padding: 20 }}>
+      <SafeAreaView style={styles.safeAreaView}>
+        <ScrollView style={styles.scrollView}>
           <View style={{ height: '20%' }} />
 
-          <Text style={{ fontSize: 32, fontWeight: 'bold' }}>
+          <Text style={styles.message}>
             Entérate lo que está pasando en el mundo sin morir en el intento
           </Text>
 
           <View style={{ height: '15%' }} />
 
           <Input
+            autoFocus
             label="Usuario"
             placeholder="Ingresa tu email"
             keyboardType="email-address"
             autoCapitalize="none"
-            onChangeText={(value) => handleInputChange('email', value)}
+            onChangeText={(value) => handleInputChange('username', value)}
           />
           <Input
             label="Contraseña"
