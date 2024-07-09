@@ -1,73 +1,41 @@
-import React, { useEffect } from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
-import { Divider, InsightCard, Topic } from '../components';
-import styles from './styles';
-import colors from '../styles/colors';
+import React, { useEffect, useState } from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { LoginScreen, HomeScreen, BookmarksScreen } from '../screens';
+import { streamer } from '../lib';
+
+const Drawer = createDrawerNavigator();
 
 export const App = () => {
-  const [loading, setLoading] = React.useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
+
+  const handleAuthenticated = () => {
+    setAuthenticated(true);
+  };
+
+  const handleUserLoggedIn = () => {};
+
+  const handleUserLoggedOut = () => {};
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    streamer.on('USER:LOGGED_IN', handleAuthenticated);
+    streamer.on('USER:LOGGED_OUT', handleUserLoggedOut);
+    return () => {
+      streamer.off('USER:LOGGED_IN', handleAuthenticated);
+      streamer.off('USER:LOGGED_OUT', handleUserLoggedOut);
+    };
   }, []);
 
-  if (loading) {
-    return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView
-          style={[styles.safeAreaView, { justifyContent: 'center' }]}
-        >
-          <ActivityIndicator id="cuco" size="small" color={colors.blue} />
-        </SafeAreaView>
-      </>
-    );
+  if (!authenticated) {
+    return <LoginScreen />;
   }
-
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={styles.safeAreaView}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.topicsScrollView}
-        >
-          <Topic label="Todos" selected />
-          <Topic label="Tesla" />
-          <Topic label="Tesla FSD" />
-          <Topic label="Tesla Megapack" />
-          <Topic label="Tesla Model 3" />
-          <Topic label="Tesla Model Y" />
-        </ScrollView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.insightScrollView}
-        >
-          <Divider />
-          <InsightCard />
-          <Divider />
-          <InsightCard />
-          <Divider />
-          <InsightCard />
-          <Divider />
-          <InsightCard />
-          <Divider />
-          <InsightCard />
-          <Divider />
-          <InsightCard />
-          <Divider />
-          <InsightCard />
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Novedades" component={HomeScreen} />
+        <Drawer.Screen name="Elementos Guardados" component={BookmarksScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 };
 
