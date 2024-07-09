@@ -34,6 +34,8 @@ export const LoginScreen = (props: LoginScreenProps) => {
       authenticator.signIn(auth);
       props.onLoggedIn();
     } catch (error) {
+      console.error('Failed to login: ', error);
+      // TODO: Mostrar mensaje de error
     } finally {
       setLoading(false);
     }

@@ -60,6 +60,14 @@ class Authenticator extends Bootable {
   isAuthenticated(): boolean {
     return this.state !== null;
   }
+
+  getUserInfo(): IJwtPayload {
+    if (this.state === null) {
+      throw new Error('User is not authenticated');
+    }
+
+    return this.state.user;
+  }
 }
 
 export const authenticator = new Authenticator();

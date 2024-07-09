@@ -3,13 +3,19 @@ import { Pressable, Text, View } from 'react-native';
 import styles from './styles';
 import colors from '../../styles/colors';
 
-interface ITopicProps {
+interface TabItemProps {
   label: string;
   selected?: boolean;
+  onPress: () => void;
 }
 
-export const Topic = (props: ITopicProps) => {
-  const { label, selected } = props;
+export const TabItem = (props: TabItemProps) => {
+  const { label, selected, onPress } = props;
+
+  const pressHandle = () => {
+    onPress();
+  };
+
   return (
     <Pressable
       style={({ pressed }) => [
@@ -18,6 +24,7 @@ export const Topic = (props: ITopicProps) => {
         },
         styles.container,
       ]}
+      onPress={pressHandle}
     >
       <Text
         style={[
@@ -35,4 +42,4 @@ export const Topic = (props: ITopicProps) => {
   );
 };
 
-export default Topic;
+export default TabItem;

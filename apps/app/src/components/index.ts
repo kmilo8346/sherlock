@@ -1,3 +1,3 @@
-export { InsightCard, InsightCardProps } from './insight-card';
+export { TweetItem } from './tweet-item';
 export { Divider } from './divider';
-export { Topic } from './topic';
+export { TabItem } from './tab-item';

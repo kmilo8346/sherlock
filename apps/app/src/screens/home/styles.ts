@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 5,
     minHeight: 36,
+    flexGrow: 0,
   },
 });
 

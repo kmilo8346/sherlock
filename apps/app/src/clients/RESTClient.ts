@@ -1,5 +1,6 @@
-import axios, { AxiosInstance, AxiosHeaders } from 'axios';
+import axios, { AxiosInstance, AxiosHeaders, AxiosRequestConfig } from 'axios';
 import { authenticator } from '../lib';
+import { ICollection, SearchParams } from '@sherlock/models';
 
 interface ICONFIG {
   baseURL: string;
@@ -58,5 +59,16 @@ export default class RESTClient {
         }
       }
     );
+  }
+
+  async getAll<E>(
+    params: SearchParams,
+    config?: AxiosRequestConfig
+  ): Promise<ICollection<E>> {
+    const response = await this.axios.get<ICollection<E>>('/', {
+      ...config,
+      params,
+    });
+    return response.data;
   }
 }
