@@ -26,7 +26,7 @@ export abstract class DBClient<T extends Document> {
    */
   async getById(id: string): Promise<T> {
     const filter = {
-      _id: new ObjectId(id),
+      _id: id.length !== 24 ? id : new ObjectId(id),
     } as Filter<T>;
 
     const data = await this.collection.findOne(filter);
@@ -99,7 +99,7 @@ export abstract class DBClient<T extends Document> {
     } as Partial<T>;
 
     const result = await this.collection.updateOne(
-      { _id: new ObjectId(id) } as Filter<T>,
+      { _id: id.length !== 24 ? id : new ObjectId(id) } as Filter<T>,
       { $set: data }
     );
 
@@ -117,7 +117,7 @@ export abstract class DBClient<T extends Document> {
    */
   async delete(id: string): Promise<void> {
     const result = await this.collection.deleteOne({
-      _id: new ObjectId(id),
+      _id: id.length !== 24 ? id : new ObjectId(id),
     } as Filter<T>);
 
     if (result.deletedCount === 0) {

@@ -34,7 +34,7 @@ export class UsersController {
     const password = await bcrypt.hash(createUser.password, salt);
     createUser.password = password;
 
-    return this.service.create(createUser);
+    return this.service.create<CreateUser>(createUser);
   }
 
   @Put('/:id')
@@ -46,7 +46,7 @@ export class UsersController {
       updateUser.password = password;
     }
 
-    return this.service.update(id, updateUser);
+    return this.service.update<UpdateUser>(id, updateUser);
   }
 
   @Delete('/:id')

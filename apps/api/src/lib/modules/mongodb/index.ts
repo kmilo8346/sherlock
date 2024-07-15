@@ -37,12 +37,11 @@ export class MongoModule implements OnModuleInit {
 
     const client = new MongoClient(this.configService.get('MONGODB_URI'));
     try {
-      this.logger.log(`Connecting to MongoDB...`);
       await client.connect();
       const db = client.db();
       const admin = db.admin();
       await admin.ping();
-      this.logger.log(`Connection sucesfull ${stamp()}`);
+      this.logger.log(`Connection to MongoDB was sucesfull ${stamp()}`);
     } catch (error) {
       this.logger.error(`Connection [FAILURE] ${stamp()}`, error);
       this.logger.error('Exiting application...');

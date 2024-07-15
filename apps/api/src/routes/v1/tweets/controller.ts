@@ -8,12 +8,12 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { CreateSubscription, SearchParams } from '@sherlock/models';
-import { SubscriptionsService } from './service';
+import { CreateTweet, SearchParams } from '@sherlock/models';
+import { TweetsService } from './service';
 
-@Controller('/v1/subscriptions')
-export class SubscriptionsController {
-  constructor(private readonly service: SubscriptionsService) {}
+@Controller('/v1/tweets')
+export class TweetsController {
+  constructor(private readonly service: TweetsService) {}
 
   @Get('/:id')
   getById(@Param('id') id: string) {
@@ -26,8 +26,8 @@ export class SubscriptionsController {
   }
 
   @Post('/')
-  create(@Body() createSubscription: CreateSubscription) {
-    return this.service.create<CreateSubscription>(createSubscription);
+  create(@Body() createTweet: CreateTweet) {
+    return this.service.create<CreateTweet>(createTweet);
   }
 
   @Delete('/:id')
