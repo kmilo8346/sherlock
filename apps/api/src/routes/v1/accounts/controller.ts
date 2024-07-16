@@ -9,11 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import {
-  AccountSearchParams,
-  CreateAccount,
-  UpdateAccount,
-} from '@sherlock/models';
+import { SearchAccounts, CreateAccount, UpdateAccount } from '@sherlock/models';
 import { AccountsService } from './service';
 
 @Controller('/v1/accounts')
@@ -26,7 +22,7 @@ export class AccountsController {
   }
 
   @Get('/')
-  getAll(@Query() searchParams: AccountSearchParams) {
+  getAll(@Query() searchParams: SearchAccounts) {
     return this.service.getAll(searchParams);
   }
 

@@ -132,11 +132,11 @@ export class UpdateAccount {
 export class Filter {
   @IsBoolean()
   @IsOptional()
-  @Transform(({ value }) => value === 'true' || value === true)
-  enabled!: boolean;
+  @Transform(({ value }) => value === 'true')
+  enabled?: boolean;
 }
 
-export class AccountSearchParams extends SearchParams {
+export class SearchAccounts extends SearchParams {
   @IsOptional()
   @ValidateNested()
   @Type(() => Filter)

@@ -11,7 +11,7 @@ import {
 
 import {
   CreateDataSource,
-  SearchParams,
+  SearchDataSources,
   UpdateDataSource,
 } from '@sherlock/models';
 import { DataSourcesService } from './service';
@@ -26,7 +26,7 @@ export class DataSourcesController {
   }
 
   @Get('/')
-  getAll(@Query() searchParams: SearchParams) {
+  getAll(@Query() searchParams: SearchDataSources) {
     return this.service.getAll(searchParams);
   }
 

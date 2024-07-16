@@ -4,10 +4,15 @@ export {
   Account,
   CreateAccount,
   UpdateAccount,
-  AccountSearchParams,
+  SearchAccounts,
 } from './account';
 export { Tweet, CreateTweet, UpdateTweet, CreateManyTweets } from './tweet';
-export { DataSource, CreateDataSource, UpdateDataSource } from './data-source';
+export {
+  DataSource,
+  CreateDataSource,
+  UpdateDataSource,
+  SearchDataSources,
+} from './data-source';
 export { Insight, InsightStats, CreateInsight, UpdateInsight } from './insight';
 export {
   Subscription,
