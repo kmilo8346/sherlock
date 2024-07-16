@@ -9,7 +9,11 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { CreateAccount, SearchParams, UpdateAccount } from '@sherlock/models';
+import {
+  AccountSearchParams,
+  CreateAccount,
+  UpdateAccount,
+} from '@sherlock/models';
 import { AccountsService } from './service';
 
 @Controller('/v1/accounts')
@@ -22,18 +26,18 @@ export class AccountsController {
   }
 
   @Get('/')
-  getAll(@Query() searchParams: SearchParams) {
+  getAll(@Query() searchParams: AccountSearchParams) {
     return this.service.getAll(searchParams);
   }
 
   @Post('/')
   create(@Body() createAccount: CreateAccount) {
-    return this.service.create<CreateAccount>(createAccount);
+    return this.service.create(createAccount);
   }
 
   @Put('/:id')
   update(@Param('id') id: string, @Body() updateAccount: UpdateAccount) {
-    return this.service.update<UpdateAccount>(id, updateAccount);
+    return this.service.update(id, updateAccount);
   }
 
   @Delete('/:id')

@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { CreateTweet, SearchParams } from '@sherlock/models';
+import { CreateManyTweets, CreateTweet, SearchParams } from '@sherlock/models';
 import { TweetsService } from './service';
 
 @Controller('/v1/tweets')
@@ -27,7 +27,12 @@ export class TweetsController {
 
   @Post('/')
   create(@Body() createTweet: CreateTweet) {
-    return this.service.create<CreateTweet>(createTweet);
+    return this.service.create(createTweet);
+  }
+
+  @Post('/many')
+  createMany(@Body() createManyTweets: CreateManyTweets) {
+    return this.service.createMany(createManyTweets.data);
   }
 
   @Delete('/:id')

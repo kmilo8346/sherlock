@@ -1,0 +1,58 @@
+{
+  "name": "downloader",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/downloader/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/downloader",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/downloader/src/main.ts",
+        "tsConfig": "apps/downloader/tsconfig.app.json",
+        "assets": ["apps/downloader/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["core:build"],
+      "options": {
+        "buildTarget": "downloader:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "downloader:build:development",
+          "args": ["test"]
+        },
+        "production": {
+          "buildTarget": "downloader:build:production"
+        }
+      }
+    }
+  }
+}

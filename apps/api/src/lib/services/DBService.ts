@@ -7,9 +7,11 @@ import {
   MongoClient,
   ObjectId,
   OptionalUnlessRequiredId,
+  Sort,
+  SortDirection,
 } from 'mongodb';
 
-export abstract class DBClient<T extends Document> {
+export abstract class DBService<T extends Document, C, U> {
   protected readonly collectionName: string;
   protected readonly collection: Collection<T>;
 
@@ -45,11 +47,19 @@ export abstract class DBClient<T extends Document> {
    * @returns {Promise<ICollection<T>>}
    */
   async getAll(params?: SearchParams): Promise<ICollection<T>> {
-    const _params = Object.assign({ filter: {}, from: 0, size: 10 }, params);
+    const _params: SearchParams = Object.assign(
+      { filter: {}, from: 0, size: 10, sort: undefined },
+      params
+    );
 
-    const { filter, from, size } = _params;
+    const { filter, from, size, sort } = _params;
     const [data, total] = await Promise.all([
-      this.collection.find(filter).skip(from).limit(size).toArray(),
+      this.collection
+        .find(filter)
+        .skip(from)
+        .limit(size)
+        .sort(sort as { [key: string]: SortDirection })
+        .toArray(),
       this.collection.countDocuments(filter),
     ]);
 
@@ -63,14 +73,14 @@ export abstract class DBClient<T extends Document> {
 
   /**
    * Crear un nuevo documento en la colección
-   * @param createTopic
+   * @param createDocument
    * @returns {Promise<T>}
    */
-  async create<C>(createTopic: C): Promise<T> {
+  async create(createDocument: C): Promise<T> {
     const data = {
-      ...createTopic,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      ...createDocument,
     } as unknown as T;
 
     const result = await this.collection.insertOne(
@@ -88,11 +98,34 @@ export abstract class DBClient<T extends Document> {
   }
 
   /**
+   * Crea varios documentos en la colección
+   * @param createDocuments
+   */
+  async createMany(createDocuments: C[]) {
+    const data = createDocuments.map((document) => ({
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      ...document,
+    }));
+
+    const result = await this.collection.insertMany(
+      data as OptionalUnlessRequiredId<T>[]
+    );
+
+    if (result.acknowledged === false) {
+      throw new HttpException(
+        `Failed to create documents`,
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  /**
    * Actualiza un documento en la colección
    * @param id
    * @param updateTopic
    */
-  async update<U>(id: string, updateTopic: U): Promise<void> {
+  async update(id: string, updateTopic: U): Promise<void> {
     const data = {
       ...updateTopic,
       updated_at: new Date().toISOString(),

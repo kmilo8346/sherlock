@@ -9,6 +9,10 @@
       "path": "./apps/api/src"
     },
     {
+      "name": "⏰ Downloader",
+      "path": "./apps/downloader/src"
+    },
+    {
       "name": "📦 Models",
       "path": "./lib/models/src"
     },

@@ -28,12 +28,12 @@ export class InsightsController {
 
   @Post('/')
   create(@Body() createInsight: CreateInsight) {
-    return this.service.create<CreateInsight>(createInsight);
+    return this.service.create(createInsight);
   }
 
   @Put('/:id')
   update(@Param('id') id: string, @Body() updateInsight: UpdateInsight) {
-    return this.service.update<UpdateInsight>(id, updateInsight);
+    return this.service.update(id, updateInsight);
   }
 
   @Delete('/:id')

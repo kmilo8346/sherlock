@@ -22,3 +22,5 @@ export class CreateSubscription {
   @IsNotEmpty()
   label!: string;
 }
+
+export class UpdateSubscription {}

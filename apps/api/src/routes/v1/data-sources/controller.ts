@@ -32,12 +32,12 @@ export class DataSourcesController {
 
   @Post('/')
   create(@Body() createDataSource: CreateDataSource) {
-    return this.service.create<CreateDataSource>(createDataSource);
+    return this.service.create(createDataSource);
   }
 
   @Put('/:id')
   update(@Param('id') id: string, @Body() updateDataSource: UpdateDataSource) {
-    return this.service.update<UpdateDataSource>(id, updateDataSource);
+    return this.service.update(id, updateDataSource);
   }
 
   @Delete('/:id')

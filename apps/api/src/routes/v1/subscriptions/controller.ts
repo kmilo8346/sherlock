@@ -27,7 +27,7 @@ export class SubscriptionsController {
 
   @Post('/')
   create(@Body() createSubscription: CreateSubscription) {
-    return this.service.create<CreateSubscription>(createSubscription);
+    return this.service.create(createSubscription);
   }
 
   @Delete('/:id')

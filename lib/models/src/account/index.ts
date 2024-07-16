@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsInt,
@@ -9,6 +9,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { SearchParams } from '../rest';
 
 export class Account {
   _id!: string;
@@ -16,13 +17,15 @@ export class Account {
   name!: string;
   description?: string;
   profile_image_url?: string;
-  protected!: boolean;
+  url?: string;
+  location?: string;
   public_metrics!: {
     followers_count: number;
     following_count: number;
     tweet_count: number;
     listed_count: number;
   };
+  protected!: boolean;
   verified!: string;
   enabled!: boolean;
   last_sync_date!: string;
@@ -78,6 +81,14 @@ export class CreateAccount {
   @IsOptional()
   profile_image_url?: string;
 
+  @IsString()
+  @IsOptional()
+  url?: string;
+
+  @IsString()
+  @IsOptional()
+  location?: string;
+
   @IsBoolean()
   @IsNotEmpty()
   protected!: boolean;
@@ -94,12 +105,12 @@ export class CreateAccount {
 
   @IsBoolean()
   @IsNotEmpty()
-  enabled!: boolean;
+  enabled: boolean = true;
 
   @IsString()
   @IsNotEmpty()
   @IsISO8601()
-  last_sync_date!: string;
+  last_sync_date: string = new Date().toISOString();
 
   @IsString()
   @IsNotEmpty()
@@ -116,4 +127,18 @@ export class UpdateAccount {
   @IsOptional()
   @IsISO8601()
   last_sync_date?: string;
+}
+
+export class Filter {
+  @IsBoolean()
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  enabled!: boolean;
+}
+
+export class AccountSearchParams extends SearchParams {
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Filter)
+  override filter?: Filter;
 }

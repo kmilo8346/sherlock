@@ -1,0 +1,59 @@
+[
+  {
+    "_id": "44196397",
+    "username": "elonmusk",
+    "name": "Elon Musk",
+    "description": "",
+    "profile_image_url": "https://pbs.twimg.com/profile_images/1780044485541699584/p78MCn3B_normal.jpg",
+    "protected": false,
+    "verified": false,
+    "public_metrics": {
+      "followers_count": 189727266,
+      "following_count": 656,
+      "tweet_count": 47116,
+      "listed_count": 152077,
+      "like_count": 60464
+    },
+    "created_at": "2024-07-15T18:20:20.312Z",
+    "enabled": true,
+    "last_sync_date": "2024-07-16T15:21:59.000Z",
+    "updated_at": "2024-07-16T16:46:47.931Z"
+  },
+  {
+    "_id": "1263491240336769026",
+    "username": "WholeMarsBlog",
+    "name": "Whole Mars Catalog",
+    "verified": false,
+    "url": "https://t.co/QmsKvMsFxC",
+    "description": "Covering tech, markets, AI, new energy, and autonomous electric vehicles 24/7",
+    "public_metrics": {
+      "followers_count": 493500,
+      "following_count": 25140,
+      "tweet_count": 323453,
+      "listed_count": 3096,
+      "like_count": 592891
+    },
+    "protected": false,
+    "location": "San Francisco, CA",
+    "profile_image_url": "https://pbs.twimg.com/profile_images/1593688242771017728/1Ocz0cvu_normal.jpg",
+    "created_at": "2020-05-21T15:26:16.000Z"
+  },
+  {
+    "url": "https://t.co/HwQgaNCVnf",
+    "verified": false,
+    "protected": false,
+    "description": "Co-Founder of @TwinBirchUSA | sustainable lifestyle apparel. $TSLA investor. EV/space/tech news. My posts aren’t financial advice.",
+    "created_at": "2011-01-26T03:04:15.000Z",
+    "username": "SawyerMerritt",
+    "name": "Sawyer Merritt",
+    "_id": "243013409",
+    "profile_image_url": "https://pbs.twimg.com/profile_images/1756731259961683968/MljVGgIm_normal.jpg",
+    "public_metrics": {
+      "followers_count": 710590,
+      "following_count": 322,
+      "tweet_count": 87223,
+      "listed_count": 3976,
+      "like_count": 178173
+    }
+  }
+]

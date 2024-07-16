@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
   IsArray,
   IsInt,
   IsISO8601,
@@ -93,3 +94,13 @@ export class CreateTweet {
   @IsISO8601()
   created_at!: string;
 }
+
+export class CreateManyTweets {
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateTweet)
+  data!: CreateTweet[];
+}
+
+export class UpdateTweet {}
