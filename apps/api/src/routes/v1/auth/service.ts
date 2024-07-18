@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { UsersService } from '../users/service';
 import { ConfigService } from '@nestjs/config';
 
-const JWT_EXPIRATION_HOURS = 1;
+const JWT_EXPIRATION_HOURS = 24 * 7;
 
 @Injectable()
 export class AuthService {
