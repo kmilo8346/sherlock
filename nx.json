@@ -40,7 +40,11 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/api-e2e/**/*", "apps/downloader-e2e/**/*"]
+      "exclude": [
+        "apps/api-e2e/**/*",
+        "apps/downloader-e2e/**/*",
+        "apps/analyzer-e2e/**/*"
+      ]
     },
     {
       "plugin": "@nx/detox/plugin",

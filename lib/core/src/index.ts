@@ -1,3 +1,8 @@
-export { RESTClient } from './clients/RESTClient';
-export { AccountClient } from './clients/AccountClient';
-export { TweetClient } from './clients/TweetClient';
+export {
+  RESTClient,
+  ICONFIG,
+  AccountClient,
+  TweetClient,
+  DataSourceClient,
+  InsightClient,
+} from './clients';

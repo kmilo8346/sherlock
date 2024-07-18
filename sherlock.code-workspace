@@ -13,6 +13,10 @@
       "path": "./apps/downloader/src"
     },
     {
+      "name": "⏰ Analyzer",
+      "path": "./apps/analyzer/src"
+    },
+    {
       "name": "📦 Models",
       "path": "./lib/models/src"
     },

@@ -13,10 +13,12 @@ export class Job {
     console.log('Starting downloader...');
 
     // 1. Busco las cuentas activas
+    let from = 0;
+    const size = 5;
     while (true) {
       const accounts = await accountClient.getAll({
-        from: 0,
-        size: 5,
+        from,
+        size,
         filter: {
           enabled: true,
         },
@@ -46,6 +48,9 @@ export class Job {
           `> Downloaded ${tweets.length} tweets for ${account.username}`
         );
       }
+
+      // Paginación
+      from += size;
 
       // El fin es cuando se retorna
       // menos cuentas que el tamaño solicitado

@@ -12,8 +12,16 @@ export {
   CreateDataSource,
   UpdateDataSource,
   SearchDataSources,
+  TimeWindow,
 } from './data-source';
-export { Insight, InsightStats, CreateInsight, UpdateInsight } from './insight';
+export {
+  Insight,
+  InsightStats,
+  CreateInsight,
+  UpdateInsight,
+  CreateManyInsights,
+  BulkInsights,
+} from './insight';
 export {
   Subscription,
   CreateSubscription,

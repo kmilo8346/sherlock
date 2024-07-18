@@ -11,6 +11,7 @@ import {
 
 import { InsightsService } from './service';
 import { CreateInsight, SearchParams, UpdateInsight } from '@sherlock/models';
+import { BulkInsights } from 'lib/models/src/insight';
 
 @Controller('/v1/insights')
 export class InsightsController {
@@ -39,5 +40,10 @@ export class InsightsController {
   @Delete('/:id')
   delete(@Param('id') id: string) {
     return this.service.delete(id);
+  }
+
+  @Post('/bulk')
+  bulk(@Body() bulkInsights: BulkInsights) {
+    return this.service.bulk(bulkInsights);
   }
 }

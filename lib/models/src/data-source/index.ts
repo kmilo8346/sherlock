@@ -3,11 +3,16 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
-  IsISO8601,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
+  registerDecorator,
   ValidateNested,
+  ValidationArguments,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
 } from 'class-validator';
 import { SearchParams } from '../rest';
 
@@ -15,24 +20,46 @@ export class DataSource {
   _id!: string;
   label!: string;
   enabled!: boolean;
-  accounts!: {
-    id: string;
-    last_tweet_analyzed_at: string;
-  }[];
+  account_ids!: string[];
+  time_window!: { start_hour: string; end_hour: string };
   created_at!: string;
   updated_at!: string;
 }
 
-class Account {
-  @IsString()
-  @IsNotEmpty()
-  id!: string;
+@ValidatorConstraint({ async: false })
+class IsUTCHourConstraint implements ValidatorConstraintInterface {
+  validate(hour: string) {
+    const hourPattern = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+    return typeof hour === 'string' && hourPattern.test(hour);
+  }
 
-  @IsOptional()
+  defaultMessage(args: ValidationArguments) {
+    return `${args.property} is not a valid UTC hour. Valid format is HH:mm`;
+  }
+}
+
+function IsUTCHour(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [],
+      validator: IsUTCHourConstraint,
+    });
+  };
+}
+
+export class TimeWindow {
   @IsString()
   @IsNotEmpty()
-  @IsISO8601()
-  last_tweet_analyzed_at: string = new Date().toISOString();
+  @IsUTCHour()
+  start_hour!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsUTCHour()
+  end_hour!: string;
 }
 
 export class CreateDataSource {
@@ -45,27 +72,36 @@ export class CreateDataSource {
 
   @IsArray()
   @ArrayNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => Account)
-  accounts!: Account[];
+  @IsString({ each: true })
+  account_ids!: string[];
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => TimeWindow)
+  time_window!: TimeWindow;
 }
 
 export class UpdateDataSource {
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
   label?: string;
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   enabled?: boolean;
 
+  @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => Account)
+  @IsString({ each: true })
+  account_ids?: string[];
+
   @IsOptional()
-  accounts?: Account[];
+  @IsObject()
+  @ValidateNested()
+  @Type(() => TimeWindow)
+  time_window?: TimeWindow;
 }
 
 export class Filter {

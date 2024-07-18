@@ -9,6 +9,7 @@ import {
   OptionalUnlessRequiredId,
   Sort,
   SortDirection,
+  AnyBulkWriteOperation,
 } from 'mongodb';
 
 export abstract class DBService<T extends Document, C, U> {
@@ -123,23 +124,23 @@ export abstract class DBService<T extends Document, C, U> {
   /**
    * Actualiza un documento en la colección
    * @param id
-   * @param updateTopic
+   * @param data
    */
-  async update(id: string, updateTopic: U): Promise<void> {
-    const data = {
-      ...updateTopic,
+  async update(id: string, data: U): Promise<void> {
+    const toUpdate = {
+      ...data,
       updated_at: new Date().toISOString(),
     } as Partial<T>;
 
     const result = await this.collection.updateOne(
       { _id: this.createId(id) } as Filter<T>,
-      { $set: data }
+      { $set: toUpdate }
     );
 
     if (result.modifiedCount === 0) {
       throw new HttpException(
         `Failed to update document`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -161,7 +162,7 @@ export abstract class DBService<T extends Document, C, U> {
     }
   }
 
-  private createId(id: string): string | ObjectId {
+  protected createId(id: string): string | ObjectId {
     return id.length !== 24 ? id : new ObjectId(id);
   }
 }
