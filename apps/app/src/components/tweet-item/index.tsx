@@ -4,6 +4,7 @@ import { Avatar } from 'react-native-elements';
 import { Icon } from '@rneui/themed';
 import styles from './styles';
 import colors from '../../styles/colors';
+import { dateFormatter } from '../../lib';
 
 export interface TweetItemProps {
   title: string;
@@ -25,7 +26,9 @@ export const TweetItem = (props: TweetItemProps) => {
       <View style={styles.textsContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.date}> • 5h</Text>
+          <Text style={styles.date}>{` • ${dateFormatter.formatElapsedTime(
+            new Date(createdAt)
+          )}`}</Text>
         </View>
         <Text>{text}</Text>
         <View style={styles.statsContainer}>

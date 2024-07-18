@@ -31,7 +31,7 @@ export const LoginScreen = (props: LoginScreenProps) => {
       setLoading(true);
 
       const auth = await authClient.login(form);
-      authenticator.signIn(auth);
+      await authenticator.signIn(auth);
       props.onLoggedIn();
     } catch (error) {
       console.error('Failed to login: ', error);
