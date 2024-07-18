@@ -165,6 +165,9 @@ export const HomeScreen = () => {
               $in: tab.source_ids,
             },
           },
+          sort: {
+            created_at: -1,
+          },
         },
         {
           signal: abortController.signal,

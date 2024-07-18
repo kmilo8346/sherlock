@@ -62,6 +62,8 @@ export class Analyzer {
     // 1. Busco tweets
     const tweets = await this.getTweets(executionDate, dataSource);
 
+    // Si no hay tweets detengo la ejecución
+    // clusterizar sin datos falla
     if (tweets.length === 0) {
       return;
     }
@@ -71,6 +73,12 @@ export class Analyzer {
 
     // 3. Retorno los tweets comprimidos
     const filtered = await this.filterTweets(dataSource, compressed.data);
+
+    // Si no hay tweets filtrados detengo la ejecución
+    // clusterizar sin datos falla
+    if (filtered.length === 0) {
+      return;
+    }
 
     // 4. Descubro los tags
     const discoveredTags = await this.discoverTags(filtered, compressed);
@@ -83,6 +91,9 @@ export class Analyzer {
   }
 
   private async getTweets(executionDate: Date, dataSource: DataSource) {
+    console.log('');
+    console.log('Buscando tweets...');
+
     const tweets: Tweet[] = [];
     const { account_ids, time_window } = dataSource;
 
@@ -135,6 +146,8 @@ export class Analyzer {
         break;
       }
     }
+
+    console.log('> Tweets encontrados:', tweets.length);
 
     return tweets;
   }
@@ -1006,10 +1019,10 @@ export class Analyzer {
       }
     }
 
-    // DEBUG CODE
-    console.log('previousInsights length:', previousInsights.length);
-    console.log('currentInsights length:', currentInsights.length);
-    console.log('bulkInsights:', JSON.stringify(bulkInsights, null, 2));
+    // // DEBUG CODE
+    // console.log('previousInsights length:', previousInsights.length);
+    // console.log('currentInsights length:', currentInsights.length);
+    // console.log('bulkInsights:', JSON.stringify(bulkInsights, null, 2));
 
     // 4. Guardo los insights (Create, Update, Delete)
     if (bulkInsights.operations.length > 0) {
