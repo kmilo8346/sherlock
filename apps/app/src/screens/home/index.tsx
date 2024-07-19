@@ -31,6 +31,7 @@ export const HomeScreen = () => {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>();
   const [insights, setInsights] = useState<ICollection<Insight>>();
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>();
 
   const handleBoot = async () => {
     try {
@@ -76,6 +77,7 @@ export const HomeScreen = () => {
       // Guardo los tabs para pintarlos
       // en la UI cuando se seleccionen
       setTabs(tabs);
+      setSubscriptions(subscriptions.data);
     } catch (error) {
       console.error('Failed to boot: ', error);
       // TODO: Mostrar mensaje de error
@@ -240,11 +242,15 @@ export const HomeScreen = () => {
             data={insights?.data}
             renderItem={({ item }) => {
               const currentTab = tabs.find((t) => t.id === selectedTab);
-              const title = currentTab!.label;
+              // El título está en la subscripción
+              // lo encuentro usando el data source id del insight
+              const title = subscriptions?.find(
+                (s) => s.data_source_id === item.data_source_id
+              )?.label;
               return (
                 <View>
                   <TweetItem
-                    title={title}
+                    title={title || 'Sin título'}
                     text={item.content}
                     createdAt={item.created_at}
                     stats={{

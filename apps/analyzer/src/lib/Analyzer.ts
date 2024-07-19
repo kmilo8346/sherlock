@@ -3,6 +3,7 @@ import {
   CreateInsight,
   DataSource,
   Insight,
+  QueryDataSource,
   Tweet,
 } from '@sherlock/models';
 import chunk from 'lodash/chunk';
@@ -11,6 +12,11 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { insightClient, openaiClient, tweetClient } from '../clients';
 import { util } from './Util';
+
+interface ITimeWindow {
+  start_time: string;
+  end_time: string;
+}
 
 interface ITweetsCompressed {
   data: Tweet[];
@@ -57,10 +63,10 @@ export class Analyzer {
    * @param timeWindow
    */
   async generateInsights(dataSource: DataSource) {
-    const executionDate = new Date();
+    const timeWindow = this.getTimeWindow();
 
     // 1. Busco tweets
-    const tweets = await this.getTweets(executionDate, dataSource);
+    const tweets = await this.getTweets(timeWindow, dataSource);
 
     // Si no hay tweets detengo la ejecución
     // clusterizar sin datos falla
@@ -87,15 +93,14 @@ export class Analyzer {
     const normalizedTags = await this.normalizeTags(discoveredTags);
 
     // 6. Salvar insights en la base de datos
-    await this.saveInsights(executionDate, dataSource, normalizedTags);
+    await this.saveInsights(timeWindow, dataSource, normalizedTags);
   }
 
-  private async getTweets(executionDate: Date, dataSource: DataSource) {
+  private async getTweets(timeWindow: ITimeWindow, dataSource: DataSource) {
     console.log('');
     console.log('Buscando tweets...');
 
     const tweets: Tweet[] = [];
-    const { account_ids, time_window } = dataSource;
 
     // 1. Busco tweets
     let from = 0;
@@ -122,15 +127,12 @@ export class Analyzer {
         from,
         size,
         filter: {
-          author_id: {
-            $in: account_ids,
+          query_id: {
+            $in: dataSource.queries.map((q) => this.createQueryId(q)),
           },
           created_at: {
-            $gte: this.getUTCDateFromHours(
-              executionDate,
-              time_window.start_hour
-            ),
-            $lte: this.getUTCDateFromHours(executionDate, time_window.end_hour),
+            $gte: timeWindow.start_time,
+            $lte: timeWindow.end_time,
           },
         },
       });
@@ -920,7 +922,7 @@ export class Analyzer {
   }
 
   private async saveInsights(
-    executionDate,
+    timeWindow: ITimeWindow,
     dataSource: DataSource,
     normalizedTags: ITag[]
   ) {
@@ -959,14 +961,8 @@ export class Analyzer {
         filter: {
           data_source_id: dataSource._id,
           created_at: {
-            $gte: this.getUTCDateFromHours(
-              executionDate,
-              dataSource.time_window.start_hour
-            ),
-            $lte: this.getUTCDateFromHours(
-              executionDate,
-              dataSource.time_window.end_hour
-            ),
+            $gte: timeWindow.start_time,
+            $lte: timeWindow.end_time,
           },
         },
       });
@@ -1032,18 +1028,21 @@ export class Analyzer {
     console.log('> Insights guardados');
   }
 
-  private getUTCDateFromHours(executionDate: Date, hours: string) {
-    const [_hours, _minutes] = hours.split(':').map(Number);
-    return new Date(
-      Date.UTC(
-        executionDate.getUTCFullYear(),
-        executionDate.getUTCMonth(),
-        executionDate.getUTCDate(),
-        _hours,
-        _minutes,
-        0
-      )
-    );
+  private createQueryId(query: QueryDataSource) {
+    return `${query.type.toLowerCase()}|${query.value}`;
+  }
+
+  private getTimeWindow(): ITimeWindow {
+    const start_time = new Date();
+    start_time.setHours(0, 0, 0, 0); // Establece la hora al inicio del día
+
+    const end_time = new Date();
+    end_time.setHours(23, 59, 59, 999); // Establece la hora al final del día
+
+    return {
+      start_time: start_time.toISOString(),
+      end_time: end_time.toISOString(),
+    };
   }
 }
 

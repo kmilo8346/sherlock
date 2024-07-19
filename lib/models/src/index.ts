@@ -1,3 +1,6 @@
+export * from './tweet';
+export * from './data-source';
+
 export { SearchParams, ICollection } from './rest';
 export { User, CreateUser, UpdateUser } from './user';
 export {
@@ -6,14 +9,7 @@ export {
   UpdateAccount,
   SearchAccounts,
 } from './account';
-export { Tweet, CreateTweet, UpdateTweet, CreateManyTweets } from './tweet';
-export {
-  DataSource,
-  CreateDataSource,
-  UpdateDataSource,
-  SearchDataSources,
-  TimeWindow,
-} from './data-source';
+
 export {
   Insight,
   InsightStats,

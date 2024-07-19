@@ -1,4 +1,4 @@
-import { AccountClient, TweetClient } from '@sherlock/core';
+import { DataSourceClient, TweetClient } from '@sherlock/core';
 import axios from 'axios';
 
 const API_CONFIG = {
@@ -6,7 +6,7 @@ const API_CONFIG = {
   apiKey: process.env.SHERLOCK_API_KEY,
 };
 
-export const accountClient = new AccountClient(API_CONFIG);
+export const dataSourceClient = new DataSourceClient(API_CONFIG);
 
 export const tweetClient = new TweetClient(API_CONFIG);
 
