@@ -17,9 +17,9 @@ const env = fs.readFileSync(envPath, 'utf8');
 // Obtengo la variable de entorno EXPO_PUBLIC_API_URL
 const apiUrl = env.match(/EXPO_PUBLIC_API_URL=(.*)/)[1];
 
+// Creo la nueva api url
 const [protocol, rest] = apiUrl.split('//');
 const [, port] = rest.split(':');
-
 const newApiUrl = `${protocol}//${ip}:${port}`;
 
 // Reemplazar la ip en el fichero environment
