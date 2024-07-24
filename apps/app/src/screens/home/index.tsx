@@ -28,6 +28,7 @@ export const HomeScreen = () => {
   const [booting, setBooting] = useState(true);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [fecthingMore, setFetchingMore] = useState(false);
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>();
   const [insights, setInsights] = useState<ICollection<Insight>>();
@@ -192,6 +193,80 @@ export const HomeScreen = () => {
     }
   };
 
+  const handleFetchMore = async () => {
+    try {
+      // Si ya estoy buscando más insights, no hago nada
+      if (fecthingMore) {
+        return;
+      }
+
+      // Debe haber insights para buscar más
+      if (!insights) {
+        throw new Error('No insights to fetch more');
+      }
+
+      // Si llege al final de los insights, no hago nada
+      if (insights.total <= insights.from + insights.size) {
+        return;
+      }
+
+      // Un tab debe estar seleccionado
+      const tab = tabs.find((t) => t.id === selectedTab);
+      if (!tab) {
+        throw new Error('No tab selected');
+      }
+
+      // Muestro el indicador de fecthing more
+      setFetchingMore(true);
+
+      // Si hay una petición en curso, la aborto
+      if (abortController) {
+        abortController.abort();
+        abortController = new AbortController();
+      }
+
+      // Busco los proximos 10 insights
+      // asociados a las subscripciones del usuario
+      const result = await insightClient.getAll<Insight>(
+        {
+          from: insights.from + insights.size,
+          size: insights.size,
+          filter: {
+            data_source_id: {
+              $in: tab.source_ids,
+            },
+          },
+          sort: {
+            created_at: -1,
+          },
+        },
+        {
+          signal: abortController.signal,
+        }
+      );
+
+      // Pinto los insights existentes y los nuevos
+      setInsights((prev) => {
+        return {
+          ...result,
+          data: [...prev!.data, ...result.data],
+        };
+      });
+
+      // Oculto el indicador de fecthing more
+      setFetchingMore(false);
+    } catch (error) {
+      if (!axios.isCancel(error)) {
+        return;
+      }
+
+      console.error('Failed to fetch more insights: ', error);
+      // Oculto el indicador de fecthing more
+      setFetchingMore(false);
+      // TODO: Mostrar mensaje de error
+    }
+  };
+
   useEffect(() => {
     handleBoot();
   }, []);
@@ -273,6 +348,15 @@ export const HomeScreen = () => {
             }
             // TODO: Cambiar por un componente de lista vacía
             ListEmptyComponent={<View />}
+            onEndReached={handleFetchMore}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={() => {
+              return fecthingMore ? (
+                <View style={{ margin: 10, alignItems: 'center' }}>
+                  <ActivityIndicator size="small" color={colors.blue} />
+                </View>
+              ) : null;
+            }}
           />
         )}
       </SafeAreaView>
